@@ -335,13 +335,17 @@ z-index: 9;
 	opacity:0;
 	margin: 20px;
 	font-weight: 700;
+	pointer-events: none;
+
 }
 .opacityon{
 	opacity: 1;
+	pointer-events: initial;
 }
 
 .opacityoff{
 	opacity: 0;
+	pointer-events: none;
 }
 .overscale{
 	opacity: .8;
@@ -473,6 +477,7 @@ transition: all 350ms ease;
 
 .internal-nav{
   opacity: 1;
+  pointer-events: initial;
 }
 
 .active-in{
@@ -723,4 +728,7 @@ ul.social-nav li:hover, ul.social-nav li a:hover{
 	margin-top:13px;
 }
 
+.in > .switch-nav{
+	pointer-events: initial;
+}
 
