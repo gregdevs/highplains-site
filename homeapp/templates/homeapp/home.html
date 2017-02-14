@@ -1,0 +1,252 @@
+
+{% extends 'homeapp/base.html' %}
+{% block title %}Highplains Drifter - Fine Woodworking + Metal Fabrication {% endblock %}
+{% load staticfiles %}
+{% load jsonify %}
+{% block content %}
+
+<style>
+.collapsed{
+  background: none !important;
+}
+</style>
+<div class="row nopad">
+  <div class="col-md-12 nopad">
+    <div class="hero-nav">
+      <div class="h1-wrapper">
+    	  <h1>HIGH PLAINS DRIFTER</h1>
+    	  <h2>Fine Woodworking + Metal Fabrication</h2>
+    	</div>    
+    	<ul class="nav navbar-nav">
+        {% for nav in nav_items %}
+         {% if nav|cut:" " == "aboutus" or nav|cut:" " == "contact"  %}
+          <li data-nav='{{nav|cut:" "}}' class="nav-scroll-to"><a href='javascript:void(0)'>{{nav}}</a></li>
+
+          {% else %}
+          <li data-nav="{{nav}}"><a href='/{{nav|cut:" "}}'>{{nav}}</a></li>
+          {% endif %}
+    		 {% endfor %} 
+
+    	</ul>
+    </div>
+    <div class="hero-module">
+    	<div class="hero-mask"></div>
+    </div>
+    
+    <div class="hero-bg"  style='background: url("{% static 'img/hero4.jpg' %}")'>
+    </div>
+  </div>
+</div>
+
+
+<div class="row about-row" id="aboutus">
+  <div class="col-md-12">
+     <h3> {{ about_us.0.aboutus_headline }}</h3> 
+     <div class="h3-legend"></div>
+   <p>{{ about_us.0.aboutus_desc|safe}}</p>
+   <a href="/aboutus"><button type="button" class="btn btn-default contact-btn more-btn">More ></button></a>
+  </div>  
+</div>
+
+<!--<div class="row services-row">
+ {% for bucket in buckets %}
+	<div class="col-sm-12 white-cl">
+	  <h3>{{ bucket.bucket_title }}</h3>
+	  <div class="h3-legend-alternate">1</div>
+	  <div class="bucket-img" style="background-image: url('{{ bucket.bucket_image }}') "></div>
+	  <p>{{ bucket.bucket_desc|safe }}</p>	  
+	</div>
+	{% endfor %}
+</div>-->
+
+
+<div class="row projects-row nopad">
+     <div class="col-sm-12">
+       <div class="projectstitle">FEATURED PROJECTS</div>
+     </div>
+	{% for project in projects %}
+        {% with projname=project.proj.lower|cut:' ' %}
+        {% with pname=projname|cut:"'" %}
+	   <div class="col-sm-3 nopad proj-buckets" data-projid="{{project.projid}}" data-slugname="{{ project.projslug }}">
+	      <span class="bucket-span">{{ project.projtitle }} </br>VIEW PROJECT ></span> 
+	      <div class="bucket-img" style="background-image: url('{% static 'img/projects/' %}{{pname}}/web/{{project.hero}}')" data-counter="{{ forloop.counter0 }}"></div>
+	      <div class="bucket-overlay"></div>
+	  </div>
+    {% endwith %}
+    {% endwith %}
+	{% endfor %}
+</div>
+
+<div class="row contact-row" id="contact">
+  <div class="col-md-12">
+     <h3> CONTACT US</h3> 
+     <div class="h3-legend"></div>
+      <p>Contact us for stuff Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie co</p>
+    <div class="columns large-12">			
+			<form method="POST" id="post-form">
+			    {% csrf_token %}
+			    <input type="text"  class="form-control" id="nameInput" placeholder="Name">
+			    <input type="email"  class="form-control" id="emailInput" placeholder="E-Mail Address">
+          <textarea class="form-control" placeholder="Enter Your Message" id="messageInput"></textarea>
+          <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+    </div> 
+
+  </div>
+</div>
+
+<script>
+
+		$(window).scroll(function() {
+		   var hT = $('.navbar-nav').offset().top,
+		       hH = $('.navbar-nav').outerHeight(),
+		       wH = $(window).height(),
+		       wS = $(this).scrollTop();
+           wW = $(window).width();
+       //social off
+
+
+
+      
+
+		   if (wS > 100){
+		    // $('.hero-nav').addClass('locknav')
+		     $('.navbar-inverse').addClass('invert-color')
+		     $('.hero-nav').addClass('opacityoff');
+		     $('.switch-nav').addClass('opacityon');
+         $('#navbar').addClass('collapse-override-show')
+         $('.hpd-logo-nav').attr('src', "{% static '/img/hp-logo-blk.png' %}")
+         $('.icon-bar').addClass('invert-bars');
+         $('.hero-bg').addClass('overscale2');
+		   } else{   
+
+    
+		     //$('.hero-nav').removeClass('locknav')
+		     $('.navbar-inverse').removeClass('invert-color')	
+		     $('.hero-nav').removeClass('opacityoff');	
+		     $('.switch-nav').removeClass('opacityon');  
+         $('#navbar').removeClass('collapse-override-show')
+         $('.hpd-logo-nav').attr('src', "{% static '/img/hp-logo-wt.png' %}")
+         $('.icon-bar').removeClass('invert-bars');
+         $('.hero-bg').removeClass('overscale2');
+        	
+		   }
+
+
+       if (wS === 0){
+        $('.active-nav').removeClass('active-nav')
+       }
+
+      /*if (wS > 100 && wW <= 1049){
+          $('.social-nav').hide()
+      }
+      else if  (wS < 100 && wW >= 1050){
+          $('.social-nav').show()
+      }*/
+
+
+		});
+
+     $(window).scroll(function(){
+
+       var wHH = $(window).height(),
+           wSS = $(this).scrollTop();
+           wWW = $(window).width();      
+        if ($(window).width() <= 1045 && wSS > 100){
+
+           $('.social-nav').hide();
+
+        } else if ($(window).width() <= 1045 && $(window).width() >= 856 && wSS < 100){
+           $('.social-nav').show();
+
+        }
+     })
+
+     $(window).on('resize', function(){
+       var wHH = $(window).height(),
+           wSS = $(this).scrollTop();
+           wWW = $(window).width();      
+        if ($(window).width() <= 856 ){
+
+           $('.social-nav').hide();
+        } else if ($(window).width() >= 856){
+           $('.social-nav').show();
+
+        }
+     })
+
+
+
+
+
+  $('.proj-buckets').hover(function(){
+      var tSpan = $(this);  
+      tSpan.find('.bucket-overlay').addClass('overscale');  
+  
+      //setTimeout(function(){
+        tSpan.find('.bucket-span').addClass('opacityon');
+      //}, 150)
+  }, function(){
+      var tSpan = $(this);  
+
+      tSpan.find('.bucket-overlay').removeClass('overscale'); 
+      tSpan.find('.bucket-span').removeClass('opacityon');
+    
+  })  
+
+  $('.proj-buckets').on('click', function(){
+      var tName = $(this).attr('data-slugname');
+      var h = "/ourprojects/";
+      window.open(h + tName, "_self")
+    
+  })   
+
+
+
+
+
+  $('#post-form').submit(function(event){
+  	event.preventDefault();
+    console.log("form submitted!")  // sanity check
+    send_email();
+  })
+  	function send_email(){
+  		var dataMsg = {
+  			   name: $('#nameInput').val(),
+  			   email: $('#emailInput').val(), 
+  			   message: $('#messageInput').val()
+  		}
+   $.ajax({
+        url : "create_post/", // the endpoint
+        type : "POST", // http method
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+        data : { dataMsg, 'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()}, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+            if (json.toLowerCase() === "success, email sent"){
+            	alert("Your Message Has Been Sent")
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+	  }
+
+
+  $('.nav-scroll-to').on('click', function(){
+    var divid = $(this).attr('data-nav')
+    $("html, body").animate({ scrollTop: $('#' + divid).offset().top - 60 }, 400);
+  })
+
+  /*$('.more-btn').on('click', function(){
+
+  })*/
+</script>
+{% endblock %}

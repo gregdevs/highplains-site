@@ -1,0 +1,347 @@
+{% load staticfiles %}
+{% load jsonify %}
+<!doctype html>
+<html>
+    <head>
+      <title>
+      {% block title %}{% endblock %}
+      </title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+        <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+        <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">        
+				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans|Lalezar" rel="stylesheet">
+
+				<link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+        <link rel="stylesheet" href="{% static 'fonts/css/font-awesome.min.css' %}">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+        <script src="http://imagesloaded.desandro.com/imagesloaded.pkgd.js"></script>
+        <script src="{% static 'js/jquery.mobile.js' %}"></script>
+
+    </head>
+
+  <body>
+     {% if template_name == 'home' %}
+     <style>
+@media (min-width: 320px) and (max-width: 875px){
+    ul.social-nav{
+      display:none;
+    }
+  }     
+@media (min-width: 768px) and (max-width: 875px){
+    .hero-nav ul {
+    display: none;
+    }
+    .navbar-toggle{
+      display:block;
+    }
+  }
+@media (max-width: 875px) {
+  .navbar-header {
+      float: none;
+  }
+  .navbar-left,.navbar-right {
+      float: none !important;
+  }
+
+  .navbar-collapse {
+  
+  }
+  .navbar-fixed-top {
+      top: 0;
+      border-width: 0 0 1px;
+  }
+  .navbar-collapse.collapse {
+      display: none!important;
+  }
+  .navbar-nav {
+      float: none!important;
+      margin-top: 7.5px;
+  }
+  .navbar-nav>li {
+     
+  }
+  .navbar-nav>li>a {
+      padding-top: 10px;
+      padding-bottom: 10px;
+  }
+  .collapse.in{
+      display:block !important;
+  }
+} 
+     </style>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top home-nav">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img class="hpd-logo-nav" src="{% static '/img/hp-logo-wt.png' %}"  onclick="scrollUp()"/>
+        </div>
+       <div id="navbar" class="collapse navbar-collapse">     
+       	<ul class="switch-nav nav navbar-nav">
+       	  {% for nav in nav_items %}
+         {% if nav|cut:" " == "aboutus" or nav|cut:" " == "contact"  %}
+          <li data-nav='{{nav|cut:" "}}' class="nav-scroll-to"><a href='javascript:void(0)'>{{nav}}</a></li>
+
+          {% else %}
+          <li data-nav="{{nav}}"><a href='/{{nav|cut:" "}}'>{{nav}}</a></li>
+          {% endif %}
+       	  {% endfor %}
+
+      	</ul> 
+        <ul class="social-nav">
+          <li><a href=""><i class="fa fa-facebook fa-2x" aria-hidden="true"></i></a></li>
+          <li><a href="https://www.instagram.com/highplainsdrifter615/"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a></li>
+
+        </ul>
+
+      </div>
+             
+      </div>
+    </nav>
+
+    <script type="text/javascript">
+      $('.navbar-toggle').on('click', function(){
+        $('.switch-nav > li > a').toggleClass('active-in')
+        $('.social-nav').hide();
+      });
+
+    </script>
+    {% else %}
+    <style>
+@media (min-width: 320px) and (max-width: 1075px){
+    ul.social-nav{
+      display:none;
+    }
+  }    
+    .navbar-nav>li>a {
+       color: #9d9d9d;
+      }
+      .navbar-toggle{
+        background:#333;
+      }
+
+      .navbar-toggle .icon-bar {
+          background: #fff;
+      }
+      .navbar-toggle {
+           display: block;
+       }
+
+    @media (max-width: 933px){
+    .navbar-header {
+      float: none;
+  }
+  .navbar-left,.navbar-right {
+      float: none !important;
+  }
+
+  .navbar-collapse {
+      border-top: 1px solid transparent;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .navbar-fixed-top {
+      top: 0;
+      border-width: 0 0 1px;
+  }
+  .navbar-collapse.collapse {
+      display: none!important;
+  }
+  .navbar-nav {
+      float: none!important;
+      margin-top: 7.5px;
+  }
+  .navbar-nav>li {
+     float:none;
+  }
+  .navbar-nav>li>a {
+      padding-top: 10px;
+      padding-bottom: 10px;
+  }
+  .collapse.in{
+      display:block !important;
+  }   
+    }   
+@media (min-width: 934px) {
+      .navbar-toggle {
+           display: none ;
+       }  
+ 
+}
+
+    </style>
+
+    <nav class="navbar navbar-fixed-top internal-nav invert-color">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <img class="hpd-logo-nav" src="{% static '/img/hp-logo-blk.png' %}" onclick="window.location = '/'"/>
+        </div>
+      <div id="navbar" class="collapse navbar-collapse">     
+        <ul class="switch-nav nav navbar-nav internal-nav">
+          {% for nav in nav_items %}
+          <li data-nav="{{nav}}"><a href='/{{nav|cut:" "}}'>{{nav}}</a></li>
+          {% endfor %}
+
+        </ul>
+        <ul class="social-nav">
+          <li><i class="fa fa-facebook fa-2x" aria-hidden="true"></i></li>
+          <li><a href="https://www.instagram.com/highplainsdrifter615/"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a></li>
+
+        </ul>
+      </div>            
+      </div>
+    </nav>
+    <script>
+  /* $('.nav-scroll-to-home').on('click', function(){
+       var t = $(this).attr('data-nav');
+       console.log(t)
+       window.open('/#'+ t)
+   }) */
+  $(window).on('resize', function(){
+    if ($(window).width() <= 1040){
+      $('.social-nav').hide()
+    } else if ($(window).width() >= 1041){
+      $('.social-nav').show()
+    }
+  })
+  var json_string = {{template_name|jsonify}}
+  $('li[data-nav="' + json_string + '"]').addClass('active-nav');
+
+  </script>
+
+    {% endif %}
+
+
+
+    <div class="container-fluid">
+
+      {% block content %}
+      {% endblock %}
+
+    </div>
+   {% if template_name == 'home' %}
+    <footer>
+     <div class="row"> 
+       <div class="col-sm-2">
+         <span class="footer-company">HIGH PLAINS </br>DRIFTER</span>     
+       </div>
+       <div class="col-sm-10">
+        <ul class="footer-nav nav navbar-nav internal-nav">
+          {% for nav in nav_items %}
+          {% if nav|cut:" " == "aboutus" or nav|cut:" " == "contact"  %}
+          <li data-nav='{{nav|cut:" "}}' class="nav-scroll-to"><a href='javascript:void(0)'>{{nav}}</a></li>
+
+          {% else %}
+          <li data-nav="{{nav}}"><a href='/{{nav|cut:" "}}'>{{nav}}</a></li>
+          {% endif %}          
+          {% endfor %}
+        </ul>
+       </div>
+       <div class="col-sm-12">
+         <h5>Powered by <span>Actcento.</span></h5>                  
+       </div>
+
+      </div>
+    </footer>
+
+    <script type="text/javascript">
+      
+  $('.nav-scroll-to').on('click', function(){
+    $('.navbar-collapse').collapse('hide');
+    var divid = $(this).attr('data-nav')
+
+    $('.active-nav').removeClass('active-nav');
+    $('.switch-nav li[data-nav="' + divid +  '"]').addClass('active-nav');
+    //$(this).children('a').attr('style', 'color: #9d9d9d;')
+    $("html, body").animate({ scrollTop: $('#' + divid).offset().top - 60 }, 400);
+  })      
+    </script>
+    {% else %}
+
+
+    <footer>
+     <div class="row"> 
+       <div class="col-sm-2">
+         <span class="footer-company">HIGH PLAINS </br>DRIFTER</span>     
+       </div>
+       <div class="col-sm-10">
+        <ul class="footer-nav nav navbar-nav internal-nav">
+          {% for nav in nav_items %}
+          <li data-nav="{{nav}}"><a href="/{{nav|cut:" "}}">{{nav}}</a></li>
+          {% endfor %}
+        </ul>
+       </div>
+       <div class="col-sm-12">
+         <h5>Powered by <span>Actcento.</span></h5>                  
+       </div>
+
+      </div>
+    </footer>
+
+
+
+    {% endif %}
+
+<script>
+
+ function scrollUp(){
+      $("html, body").animate({ scrollTop: $('html').offset().top - 60 }, 400);
+
+ }
+
+ function detectmob() { 
+ if( navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i)
+ ){
+    return true;
+  }
+ else {
+    return false;
+  }
+}
+if (detectmob() === true){
+  $('.bucket-span').addClass('opacityon').addClass('mobile-span')
+}
+
+  $(document).ready(function() {  
+       $("#carousel-example-generic").swiperight(function() {  
+          $(this).carousel('prev');  
+          });  
+       $("#carousel-example-generic").swipeleft(function() {  
+          $(this).carousel('next');  
+     });  
+  }); 
+
+ 
+ 
+</script>
+
+
+  </body>
+</html>
+
+

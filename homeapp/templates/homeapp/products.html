@@ -1,0 +1,235 @@
+{% extends 'homeapp/base.html' %}
+{% block title %}{{template_name}} {% endblock %}
+
+{% load staticfiles %}
+{% load jsonify %}
+{% block content %}
+
+
+<style>
+	img{
+		width:100%;
+	}
+
+
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+  margin-top: 20px;
+}
+
+/* ---- .grid-item ---- */
+
+.grid-sizer,
+.grid-item {
+  width: 33.333%;
+}
+
+.grid-item {
+  float: left;
+  border: solid 1px #fff;
+  border-bottom: none;
+  border-right: none;
+  overflow: hidden;
+}
+
+.grid-item img {
+  display: block;
+  max-width: 100%;
+}
+.grid-item:hover{
+	cursor:pointer;
+}	
+</style>
+<div class="row nopad">
+	<div class="col nopad">
+		<h4 class="titlebar">{{ product.0.product_name }}</h4>
+	</div>
+</div>
+
+
+<div class="row nopad-left margintop-adjusted">
+	<div class="col-md-12">
+		<p>
+		{% autoescape off %}{{product.0.intro_text|safe}}{% endautoescape %}        
+		</p>
+	</div>
+</div>
+<div class="row nopad-left">
+  <div class="col-sm-12">
+	<div class="grid">
+		<div class="grid-sizer"></div>
+		{% for thumb in product_thumbs %}
+			  {% with projname=product.0.product_name.lower|cut:' ' %}
+			  {% with pname=projname|cut:"'" %}
+			<div class="grid-item" data-thumb="{% static 'img/products/' %}{{pname}}/web/{{thumb}}" data-counter="{{ forloop.counter0 }}">
+
+				<img src="{% static 'img/products/' %}{{pname}}/web/t/{{thumb}}"/>
+				<span class="bucket-span"><i class="fa fa-camera fa-5x center-icon" aria-hidden="true"></i></span>
+        <div class="bucket-overlay"></div>
+			  
+			</div>
+				{% endwith %}
+				{% endwith %}			
+		{% endfor %}
+	</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="gLightbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
+					<ol class="carousel-indicators">
+						{% for thumb in product_thumbs %}
+						  {% if forloop.first %}
+							<li data-target="#carousel-example-generic" data-slide-to="{{forloop.counter0}}"  class="active"></li>
+						  {% else %}
+							<li data-target="#carousel-example-generic" data-slide-to="{{forloop.counter0}}" ></li>
+							{% endif %}
+
+						{% endfor %}
+					</ol>
+					<div class="carousel-inner" role="listbox">
+						{% for thumb in product_thumbs %} 
+						{% with projname=product.0.product_name.lower|cut:' ' %} 
+						{% with pname=projname|cut:"'" %}
+						{% if forloop.first %}
+							<div class="item active">
+								<img src="{% static 'img/projects/' %}{{pname}}/web/{{thumb}}" alt="">
+								<div class="carousel-caption">
+								</div>
+							</div>
+							{% else %}
+							<div class="item ">
+								<img data-src="{% static 'img/projects/' %}{{pname}}/web/{{thumb}}" alt="">
+								<div class="carousel-caption">
+								</div>
+							</div>
+							{% endif %}
+						{% endwith %} 
+						{% endwith %} 
+						{% endfor %}
+					</div>
+					<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!--<div class="row nopad ">
+	<div class="col-md-12 nopad">
+		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+			<ol class="carousel-indicators">
+				{% for img in image_gallery %}
+					{% if forloop.first %}
+						<li data-target="#carousel-example-generic" data-slide-to="{{forloop.counter0}}" class="active"></li>
+					{% else %}
+						<li data-target="#carousel-example-generic" data-slide-to="{{forloop.counter0}}" ></li>
+					{% endif %}
+				{% endfor %}
+			</ol>
+			<div class="carousel-inner" role="listbox">
+				{% for image in image_gallery %}
+					{% if forloop.first %}
+						<div class="item active">
+							<img src="{{image.gallery_image}}" alt="...">
+							<div class="carousel-caption">
+								
+							</div>
+						</div>
+					{% else %}
+						<div class="item">
+							<img src="{{image.gallery_image}}" alt="...">
+							<div class="carousel-caption">
+								
+							</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+				
+			</div>
+			<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				<span class="sr-only">Previous</span>
+			</a>
+			<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				<span class="sr-only">Next</span>
+			</a>
+		</div>
+	</div>
+</div>-->
+
+
+
+
+<script>
+
+  var json_string = {{template_name|jsonify}}
+	 
+	$('.internal-nav li[data-nav="' + json_string + '"]').addClass('active-nav');
+
+
+	var $grid = $('.grid').masonry({
+	  itemSelector: '.grid-item',
+	  percentPosition: false,
+	  columnWidth: '.grid-sizer'
+	});
+	// layout Isotope after each image loads
+	$grid.imagesLoaded().progress( function() {
+	  $grid.masonry();
+	});
+
+
+	$('.grid-item').hover(function(){
+	    var tSpan = $(this);	
+		  tSpan.find('.bucket-overlay').addClass('overscale');	
+	
+			//setTimeout(function(){
+			  tSpan.find('.bucket-span').addClass('opacityon');
+			//}, 150)
+	}, function(){
+	    var tSpan = $(this);	
+
+		  tSpan.find('.bucket-overlay').removeClass('overscale');	
+		  tSpan.find('.bucket-span').removeClass('opacityon');
+		
+	});
+  $('.grid-item').on('click', function(){
+  	var t = $(this).attr('data-thumb');
+  	$('#gLightbox').modal({show:true})
+  	//$('#gLightbox .pic-src').attr('src', t)
+  	var cc = parseInt($(this).attr('data-counter'));
+  	$('.item').removeClass('active')
+  	$('.carousel-indicators li').removeClass('active');
+  	$('.item').eq(cc).addClass('active');
+  	$('.carousel-indicators li').eq(cc).addClass('active');
+  	 $('.item.active img').attr('src', t)
+
+  })	
+  $('#carousel-example-generic').on("slide.bs.carousel", function(ev) {
+    var lazy;
+    lazy = $(ev.relatedTarget).find("img[data-src]");
+    lazy.attr("src", lazy.data('src'));
+    lazy.removeAttr("data-src");
+  });
+</script>
+
+{% endblock %}
+
+

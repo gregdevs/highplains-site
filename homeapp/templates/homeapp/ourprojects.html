@@ -1,0 +1,55 @@
+{% extends 'homeapp/base.html' %}
+{% block title %}Our Projects{% endblock %}
+
+{% load staticfiles %}
+{% load jsonify %}
+{% block content %}
+<div class="row nopad">
+	<div class="col nopad">
+		<h4 class="titlebar">{{ template_name }}</h4>
+	</div>
+</div>
+<div class="row projects-row nopad">
+	{% for project in our_projects %}
+	   <div class="col-sm-4 nopad proj-buckets" data-slugname="{{ project.slug }}" data-project="{{ project.id }}">
+	      <span class="bucket-span">{{ project.project_title }} </br>VIEW PROJECT ></span> 
+        {% for obj in hero_photos %}
+          {% with matchname=project.project_title.lower|cut:" " %}
+          {% if obj.proj == matchname|cut:"'" %}
+           {% with thisname=matchname|cut:"'" %}
+          
+	      <div class="bucket-img" style="background-image: url('{% static 'img/projects/' %}{{thisname}}/t/{{obj.hero}}')"></div>
+	        {% endwith %}
+	        {% endif %}
+	        {% endwith %}
+	      {% endfor %}  
+
+	      <div class="bucket-overlay"></div>
+	  </div>
+	{% endfor %}
+</div>
+<script>
+
+	$('.proj-buckets').hover(function(){
+	    var tSpan = $(this);	
+		  tSpan.find('.bucket-overlay').addClass('overscale');	
+	
+			//setTimeout(function(){
+			  tSpan.find('.bucket-span').addClass('opacityon');
+			//})
+	}, function(){
+	    var tSpan = $(this);	
+
+		  tSpan.find('.bucket-overlay').removeClass('overscale');	
+		  tSpan.find('.bucket-span').removeClass('opacityon');
+		
+	})	
+
+	$('.proj-buckets').on('click', function(){
+		  var tName = $(this).attr('data-slugname');
+	    var h = "/ourprojects/";
+	    window.open(h + tName, "_self")
+		
+	})		
+</script>
+{%  endblock %}
