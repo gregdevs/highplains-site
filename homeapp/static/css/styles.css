@@ -2,6 +2,8 @@ html, body{
 font-family: 'Open Sans', sans-serif;
 }
 
+
+
 .container-fluid{
 	overflow:hidden;
 }
@@ -143,7 +145,8 @@ p{
 .hero-nav{
 	display: block;
 	text-align: center;
-	position: relative;
+	position: absolute;
+	top:0;
 	width: 99%;
 	
 	font-weight: 700;
@@ -173,14 +176,9 @@ transition: all 350ms ease;
 }
 
 .hero-bg{
-	  background-size: cover !important;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+	background-size: cover !important;
     width: 100%;
-    height: 100%;
+
     z-index: -1;
 	-webkit-transition: all 350ms ease;
 -moz-transition: all 350ms ease;
@@ -189,6 +187,15 @@ transition: all 350ms ease;
 transition: all 350ms ease;
 
 }
+@media screen (min-width: 320px) and (max-width: 600px) {
+	.hero-bg{height: 500px;}
+}
+@media screen (min-width: 600px) {
+	.hero-bg{height: 630px;}
+}
+
+
+.hero-bg{ height: 630px; }
 
 .overscale2{
 -moz-transform: scale(1.2) !important;

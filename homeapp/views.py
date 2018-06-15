@@ -19,6 +19,7 @@ def home(request):
   about_us = HomeAbout.objects.all()
   projects = HomeProject.objects.all().order_by('id')
   nav_items = MainNav.objects.all().order_by('nav_position')
+  slideshow_list = os.listdir(os.path.join(settings.STATIC_ROOT, "img/slideshow/"));
   proj_list = [] 
   for project in projects:
     thisproj = str(project).lower().replace(" ", "").replace("'", "")
@@ -29,6 +30,10 @@ def home(request):
     proj_list.append(this_dict)
 
   hero_photos = []
+  slideshow = []
+
+  for img in slideshow_list:
+    slideshow.append(img) 
 
   for p in proj_list:
     pthumbs = os.listdir(os.path.join(settings.STATIC_ROOT, "img/projects/" + p['projname'] + '/web/'))
@@ -37,7 +42,8 @@ def home(request):
       if "main" in t:
         hero_dict = {"proj": p['projname'], "projid": p['projid'], "projtitle": p["projtitle"], "projslug": p["projslug"],"hero": t}
         hero_photos.append(hero_dict)  
-  return render(request, 'homeapp/home.html',  {'buckets': buckets, 'about_us': about_us, 'projects': hero_photos, 'nav_items': nav_items, 'template_name': 'home'})
+  logging.info(slideshow)      
+  return render(request, 'homeapp/home.html',  {'slideshow_images': slideshow, 'buckets': buckets, 'about_us': about_us, 'projects': hero_photos, 'nav_items': nav_items, 'template_name': 'home'})
 
 
 def create_post(request):
@@ -49,7 +55,7 @@ def create_post(request):
     template = get_template('homeapp/contact_template.txt')
     context = Context({'contact_name': contact_name,'contact_email': contact_email, 'form_content':form_content,})
     content = template.render(context)
-    email = EmailMessage("New Contact form submission", content, "Your website" + '', ['highplainsdrifter615@gmail.com'], headers = {'Reply-To': contact_email })
+    email = EmailMessage("New Contact form submission", content, "Your website" + '', [''], headers = {'Reply-To': contact_email })
     email.send()
  
 
