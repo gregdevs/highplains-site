@@ -52,9 +52,9 @@
     <div class="carousel-inner" role="listbox">
       {% for img in slideshow_images %}
         {% if forloop.first %}
-          <div class="item hero-bg active" style="background: url('{% static 'img/slideshow/' %}{{img}}')"></div>
+          <div class="item hero-bg active" style="background: url('{% static 'img/slideshow/' %}{{img}}') no-repeat center center fixed; "></div>
           {% else %}
-            <div class="item hero-bg" style="background: url('{% static 'img/slideshow/' %}{{img}}')"></div>
+            <div class="item hero-bg" style="background: url('{% static 'img/slideshow/' %}{{img}}') no-repeat center center fixed; "></div>
         {% endif %}        
       {% endfor %}
     </div>
