@@ -41,8 +41,7 @@ def home(request):
     for t in pthumbs:
       if "main" in t:
         hero_dict = {"proj": p['projname'], "projid": p['projid'], "projtitle": p["projtitle"], "projslug": p["projslug"],"hero": t}
-        hero_photos.append(hero_dict)  
-  logging.info(slideshow)      
+        hero_photos.append(hero_dict)       
   return render(request, 'homeapp/home.html',  {'slideshow_images': slideshow, 'buckets': buckets, 'about_us': about_us, 'projects': hero_photos, 'nav_items': nav_items, 'template_name': 'home'})
 
 
